@@ -1,37 +1,44 @@
 const dotenv = require('dotenv');
-dotenv.config({ path: './.env' });
-const http = require('http');
+dotenv.config({
+  path: './.env',
+});
+const { kafka, topics } = require('./config/kafka.config.js');
 const highPriorityConsumer = require('./consumers/highPriority.consumer.js');
 const lowPriorityConsumer = require('./consumers/lowPriority.consumer.js');
 const errorConsumer = require('./consumers/error.consumer.js');
-const runProducer = require("./consumers/producer.kafka.js")
 
-// HTTP Server Setup (for optional admin or status endpoints)
-const requestHandler = (req, res) => {
-  res.writeHead(200, { 'Content-Type': 'text/plain' });
-  res.end('Kafka consumer is running');
-};
+async function kafkaInit() {
+  const admin = kafka.admin();
 
-// Start HTTP Server
-const server = http.createServer(requestHandler);
+  await admin.connect();
+  console.log('Admin Connection Success...');
 
-// Start Kafka Consumer
-highPriorityConsumer().catch(err => {
-  console.error('Error in high priority consumer : ', err);
-});
+  const topicsToCreate = [
+    {
+      topic: topics.highPriorityEmails,
+      numPartitions: 6,
+    },
+    {
+      topic: topics.lowPriorityEmails,
+      numPartitions: 4,
+    },
+    {
+      topic: topics.errorHandlers,
+      numPartitions: 2,
+    },
+  ];
 
-lowPriorityConsumer().catch(err => {
-  console.error('Error in low priority consumer : ', err);
-});
+  await admin.createTopics({ topics: topicsToCreate });
+  console.log('Topics created successfully');
 
-runProducer().catch(err => {
-  console.error('producer error : ', err);
-})
+  console.log('Disconnecting Admin...');
+  await admin.disconnect();
+}
 
-errorConsumer().catch(err => {
-  console.error('consumer error : ', err);
-})
+(async () => {
+  await kafkaInit();
 
-server.listen(process.env.PORT, () => {
-  console.log(`🚝 Server is running at port ${process.env.PORT}`);
-});
+  await highPriorityConsumer();
+  await lowPriorityConsumer();
+  await errorConsumer();
+})();

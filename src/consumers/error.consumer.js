@@ -1,6 +1,6 @@
-const { kafkaClient, topics } = require("../config/kafka.config");
+const { kafka, topics } = require("../config/kafka.config");
 
-const errorConsumer = kafkaClient.consumer({ groupId: 'error-group' });
+const errorConsumer = kafka.consumer({ groupId: 'error-group' });
 
 const runErrorConsumer = async () => {
   await errorConsumer.connect();

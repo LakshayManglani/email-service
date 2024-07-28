@@ -1,25 +1,25 @@
-const { kafkaClient, topics } = require("../config/kafka.config");
+const { kafka, topics } = require("../config/kafka.config.js");
+const { sendMail } = require('../mail/mailService.js'); // Ensure this path is correct
 
-const highPriorityConsumer = kafkaClient.consumer({ groupId: 'high-priority-group' });
+const highPriorityConsumer = kafka.consumer({ groupId: 'high-priority-group' });
 
 const runHighPriorityConsumer = async () => {
   await highPriorityConsumer.connect();
   await highPriorityConsumer.subscribe({ topic: topics.highPriorityEmails });
 
   await highPriorityConsumer.run({
-    eachBatch: async ({ batch }) => {
-      const messages = batch.messages.map(message => JSON.parse(message.value.toString()));
+    eachMessage: async ({ _, __, message }) => {
       try {
-        console.log("high priority consumer running : ", batch)
-        await sendBatchEmail(messages);  // Implement this function to send emails in batch
+        // Convert the message value to an object
+        const messageData = JSON.parse(message.value.toString());
+        
+        // Send the email using the converted object
+        sendMail(messageData);
+
       } catch (error) {
-        // On error, push failed messages to error topic
-        await producer.send({
-          topic: 'email-processing-errors',
-          messages: messages.map(message => ({ value: JSON.stringify(message) }))
-        });
+        console.error('Error processing message:', error);
       }
-    }
+    },
   });
 };
 
