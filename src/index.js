@@ -1,11 +1,8 @@
-const dotenv = require('dotenv');
-dotenv.config({
-  path: './.env',
-});
-const { kafka, topics } = require('./config/kafka.config.js');
-const highPriorityConsumer = require('./consumers/highPriority.consumer.js');
-const lowPriorityConsumer = require('./consumers/lowPriority.consumer.js');
-const errorConsumer = require('./consumers/error.consumer.js');
+import './config/env.config.js';
+import { kafka, topics } from './config/kafka.config.js';
+import highPriorityConsumer from './consumers/highPriority.consumer.js';
+import lowPriorityConsumer from './consumers/lowPriority.consumer.js';
+import errorConsumer from './consumers/error.consumer.js';
 
 async function kafkaInit() {
   const admin = kafka.admin();

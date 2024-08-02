@@ -1,4 +1,4 @@
-const {transporter} = require('../config/mail.config.js');
+import { transporter } from '../config/mail.config.js';
 
 const sendMail = async (data) => {
   try {
@@ -10,10 +10,11 @@ const sendMail = async (data) => {
     });
     console.log(`Email No. ${data.id} sent successfully to ${data.email}`);
   } catch (error) {
-    console.error(`Failed to send email No. ${data.id} to ${data.email}:`, error);
+    console.error(
+      `Failed to send email No. ${data.id} to ${data.email}:`,
+      error
+    );
   }
 };
 
-module.exports = {
-  sendMail,
-};
+export { sendMail };

@@ -1,6 +1,5 @@
-const { kafka, topics } = require("../config/kafka.config");
-const {  sendMail } = require("../mail/mailService");
-
+import { kafka, topics } from '../config/kafka.config.js';
+import { sendMail } from '../mail/mailService.js';
 
 const lowPriorityConsumer = kafka.consumer({ groupId: 'low-priority-group' });
 
@@ -13,10 +12,9 @@ const runLowPriorityConsumer = async () => {
       try {
         // Convert the message value to an object
         const messageData = JSON.parse(message.value.toString());
-        
+
         // Send the email using the converted object
         sendMail(messageData);
-
       } catch (error) {
         console.error('Error processing message:', error);
       }
@@ -24,4 +22,4 @@ const runLowPriorityConsumer = async () => {
   });
 };
 
-module.exports = runLowPriorityConsumer;
+export default runLowPriorityConsumer;
