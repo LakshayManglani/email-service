@@ -32,6 +32,8 @@ Thumbs.db
 
 # Docker files
 Dockerfile
+Dockerfile.dev
+docker-compose.yml
 docker-compose.yml
 
 # Other ignored files
