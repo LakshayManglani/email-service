@@ -17,11 +17,16 @@ services:
       KAFKA_NUM_PARTITIONS: 3
 
   email-service:
-    image: lakshaymanglani/email-service:production
+    image: lakshaymanglani/email-service:development
     build:
+      labels:
+        - wow=now
       context: .
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.dev
     depends_on:
       - kafka-broker
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
     env_file:
-      - .env
+      - .env.dev

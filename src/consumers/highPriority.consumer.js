@@ -1,5 +1,5 @@
-const { kafka, topics } = require("../config/kafka.config.js");
-const { sendMail } = require('../mail/mailService.js'); // Ensure this path is correct
+import { kafka, topics } from '../config/kafka.config.js';
+import { sendMail } from '../mail/mailService.js'; // Ensure this path is correct
 
 const highPriorityConsumer = kafka.consumer({ groupId: 'high-priority-group' });
 
@@ -12,10 +12,9 @@ const runHighPriorityConsumer = async () => {
       try {
         // Convert the message value to an object
         const messageData = JSON.parse(message.value.toString());
-        
+
         // Send the email using the converted object
         sendMail(messageData);
-
       } catch (error) {
         console.error('Error processing message:', error);
       }
@@ -23,4 +22,4 @@ const runHighPriorityConsumer = async () => {
   });
 };
 
-module.exports = runHighPriorityConsumer;
+export default runHighPriorityConsumer;

@@ -1,4 +1,4 @@
-# Contributing guide for Email Service
+# Contributing guide
 
 ## How to contribute
 

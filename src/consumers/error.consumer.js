@@ -1,4 +1,4 @@
-const { kafka, topics } = require("../config/kafka.config");
+import { kafka, topics } from '../config/kafka.config.js';
 
 const errorConsumer = kafka.consumer({ groupId: 'error-group' });
 
@@ -11,8 +11,8 @@ const runErrorConsumer = async () => {
       const email = JSON.parse(message.value.toString());
       // Handle the error, e.g., log it or retry
       console.error('Failed to process email:', email);
-    }
+    },
   });
 };
 
-module.exports = runErrorConsumer;
+export default runErrorConsumer;
