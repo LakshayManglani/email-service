@@ -21,6 +21,35 @@ This is an email service built using Node.js and Kafka. The service handles send
 
 ## Installation
 
+### 📦 Using Docker
+
+
+1. **Clone the repository**:
+
+   ```bash
+   git clone https://github.com/LakshayManglani/email-service.git
+   cd email-service
+   ```
+
+2. **Set up environment variables:**
+
+   1. Create two environment files: .env for production and .env.dev for development.
+   2. Copy the content of .env.sample into both .env and .env.dev.
+   3. Replace the placeholder values with your actual environment credentials.
+
+3. **Run the Docker containers:**
+
+   For development:
+      ```bash
+      docker compose -f docker-compose.dev.yml up -d
+      ```
+   For production:
+      ```bash
+      docker compose up -d
+      ```
+
+### 💻 Running locally
+
 1. **Clone the repository**:
 
    ```bash
@@ -36,13 +65,20 @@ This is an email service built using Node.js and Kafka. The service handles send
 
 3. **Set up environment variables**:
 
-   Create a `.env` file in the root directory and copy the .env.example content and replace it's value with your own environment:
+   1. Create a .env file in the root directory.
+   2. Copy the content from .env.sample into .env.
+   3. Replace the placeholder values with your actual environment credentials.
+
+4. **Start the service:**
+   ```bash
+   npm start
+   ```
 
 ## How to contribute
 
 We welcome contributions from the community. Please follow these steps to contribute:
 
-1. **Fork the repository**.
+1. **Fork the repository**
 2. **Create a new branch**:
    ```bash
    git checkout -b feat/feature-branch-name
@@ -75,4 +111,4 @@ For any inquiries or issues, please open an issue on GitHub or reach out to us u
 
 ---
 
-Thank you for using our Auth Service! We hope it helps you manage authentication in your projects efficiently.
+Thank you for using our Service! We hope it helps you.
