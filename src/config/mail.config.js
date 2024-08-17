@@ -1,13 +1,14 @@
 import { createTransport } from 'nodemailer';
+import env from './env.config.js';
+
 const smtp = {
-  host: process.env.SMTP_HOST,
-  port: Number(process.env.SMTP_PORT),
+  host: env.SMTP_HOST,
+  port: env.SMTP_PORT,
   auth: {
-    user: process.env.SMTP_USERNAME,
-    pass: process.env.SMTP_PASSWORD,
+    user: env.SMTP_USERNAME,
+    pass: env.SMTP_PASSWORD,
   },
 };
 
 const transporter = createTransport(smtp);
-
 export { transporter };
