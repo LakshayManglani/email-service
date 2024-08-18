@@ -1,41 +1,36 @@
-import './config/env.config.js';
-import { kafka, topics } from './config/kafka.config.js';
-import highPriorityConsumer from './consumers/highPriority.consumer.js';
-import lowPriorityConsumer from './consumers/lowPriority.consumer.js';
-import errorConsumer from './consumers/error.consumer.js';
+import initializeKafkaTopic from './admin/topicManager.admin.js';
+import { initializeKafkaConsumer } from './consumers/kafka.consumer.js';
+import { processMessages } from './consumers/messageProcessor.consumer.js';
 
-async function kafkaInit() {
-  const admin = kafka.admin();
+let consumer;
 
-  await admin.connect();
-  console.log('Admin Connection Success...');
-
-  const topicsToCreate = [
-    {
-      topic: topics.highPriorityEmails,
-      numPartitions: 6,
-    },
-    {
-      topic: topics.lowPriorityEmails,
-      numPartitions: 4,
-    },
-    {
-      topic: topics.errorHandlers,
-      numPartitions: 2,
-    },
-  ];
-
-  await admin.createTopics({ topics: topicsToCreate });
-  console.log('Topics created successfully');
-
-  console.log('Disconnecting Admin...');
-  await admin.disconnect();
+async function main() {
+  try {
+    await initializeKafkaTopic();
+    consumer = await initializeKafkaConsumer();
+    await processMessages(consumer);
+  } catch (error) {
+    console.error('Error running Kafka consumer:', error);
+    process.exit(1);
+  }
 }
 
-(async () => {
-  await kafkaInit();
+async function cleanup() {
+  if (consumer) {
+    await consumer.disconnect();
+  }
+}
 
-  await highPriorityConsumer();
-  await lowPriorityConsumer();
-  await errorConsumer();
-})();
+process.on('SIGINT', async () => {
+  console.log('SIGINT signal received.');
+  await cleanup();
+  process.exit(0);
+});
+
+process.on('SIGTERM', async () => {
+  console.log('SIGTERM signal received.');
+  await cleanup();
+  process.exit(0);
+});
+
+main();

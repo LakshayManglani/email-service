@@ -1,14 +1,9 @@
 import { Kafka } from 'kafkajs';
+import env from './env.config.js';
 
 const kafka = new Kafka({
-  clientId: 'email-service',
-  brokers: [process.env.KAFKA_BROKER_URI],
+  clientId: env.KAFKA_CLIENT_ID,
+  brokers: env.KAFKA_BROKERS_URI,
 });
 
-const topics = {
-  highPriorityEmails: 'high-priority-emails',
-  lowPriorityEmails: 'low-priority-emails',
-  errorHandlers: 'email-processing-errors',
-};
-
-export { kafka, topics };
+export { kafka };
