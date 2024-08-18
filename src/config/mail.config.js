@@ -6,7 +6,7 @@ const transporter = createTransport({
   port: env.SMTP_PORT,
   service: env.SMTP_SERVICE,
   auth: {
-    user: env.SMTP_EMAIL,
+    user: env.SMTP_USERNAME,
     pass: env.SMTP_PASSWORD,
   },
 });

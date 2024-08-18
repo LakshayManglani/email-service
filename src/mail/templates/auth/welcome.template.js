@@ -5,7 +5,7 @@
  * @param {string} data.firstName - The recipient's first name.
  * @returns {Object} - An object containing the subject and body of the welcome email.
  */
-async function welcomeTemplate(data) {
+function welcomeTemplate(data) {
   const projectName = 'DevSync';
   const { firstName } = data;
 
