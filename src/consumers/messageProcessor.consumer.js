@@ -130,6 +130,7 @@ async function handleMessage(consumer, message, partitionIndex) {
     'id',
     parsedMessage.id
   );
+
   await sendMail({ subject, text, to: parsedMessage.data.to, html });
 
   await consumer.commitOffsets([
