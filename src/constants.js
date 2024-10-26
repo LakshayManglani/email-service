@@ -1,5 +1,5 @@
 const Kafka = Object.freeze({
-  TOPIC_NAME: 'email-topic',
+  TOPIC_NAME: 'email',
   NUM_PARTITIONS: 3,
   CONSUMER_GROUP_ID: 'email-group',
 });

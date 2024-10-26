@@ -110,9 +110,11 @@ async function handleMessage(consumer, message, partitionIndex) {
   const messageValue = message.value.toString();
   const parsedMessage = JSON.parse(messageValue);
 
-  const { subject, text } = templates[parsedMessage.type](parsedMessage.data);
+  const { subject, text, html } = templates[parsedMessage.type](
+    parsedMessage.data
+  );
 
-  if (!subject || !text) {
+  if (!subject || !(text || html)) {
     console.error(
       'Invalid email template for message type',
       parsedMessage.type
@@ -128,7 +130,7 @@ async function handleMessage(consumer, message, partitionIndex) {
     'id',
     parsedMessage.id
   );
-  await sendMail({ subject, text, to: parsedMessage.data.to });
+  await sendMail({ subject, text, to: parsedMessage.data.to, html });
 
   await consumer.commitOffsets([
     {
