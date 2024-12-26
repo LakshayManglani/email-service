@@ -22,7 +22,6 @@ let isProcessingMessages = false;
 function resetRateLimit() {
   setInterval(() => {
     rateLimit = INITIAL_RATE_LIMIT;
-    console.log('Rate limit reset, time', new Date());
   }, RATE_LIMIT_RESET_INTERVAL_MS);
 }
 resetRateLimit();
